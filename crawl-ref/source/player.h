@@ -267,6 +267,7 @@ public:
   set<string> uniq_map_names;
   // All maps, by level.
   map<level_id, vector<string> > vault_list;
+  map<level_id, pair<int, int> > clua_coordinates_offset;
 
   PlaceInfo global_info;
   player_quiver m_quiver;
@@ -807,6 +808,8 @@ public:
     bool form_uses_xl() const;
 
     bool clear_far_engulf();
+
+    pair<int, int> get_clua_coordinates_offset(const level_id level);
 
 protected:
     void _removed_beholder(bool quiet = false);

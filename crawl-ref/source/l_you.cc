@@ -502,6 +502,32 @@ LUAFN(you_status)
     PLUARET(string, status_effects.c_str());
 }
 
+LUAFN(l_start_travel_to)
+{
+    level_pos coords3d;
+    const string &level = luaL_checkstring(ls, 1);
+    coords3d.id = level_id::parse_level_id(level);
+    pair<int, int> offset = you.get_clua_coordinates_offset(coords3d.id);
+    coords3d.pos.x = luaL_checkint(ls, 2) - offset.first;
+    coords3d.pos.y = luaL_checkint(ls, 3) - offset.second;
+
+    start_translevel_travel(coords3d);
+
+    return 0;
+}
+
+LUAFN(l_relative_pos)
+{
+    pair<int, int> offset = you.get_clua_coordinates_offset(level_id::current());
+    int dx = offset.first;
+    int dy = offset.second;
+
+    lua_pushnumber(ls, you.pos().x + dx);
+    lua_pushnumber(ls, you.pos().y + dy);
+
+    return 2;
+}
+
 static const struct luaL_reg you_clib[] =
 {
     { "turn_is_over", you_turn_is_over },
@@ -622,6 +648,10 @@ static const struct luaL_reg you_clib[] =
     { "num_runes",          you_num_runes },
     { "have_rune",          _you_have_rune },
     { "have_orb",           you_have_orb},
+
+    { "start_travel_to", l_start_travel_to },
+    { "relative_pos", l_relative_pos },
+
 
     { nullptr, nullptr },
 };

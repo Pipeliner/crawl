@@ -8445,3 +8445,16 @@ int player::inaccuracy() const
         degree++;
     return degree;
 }
+
+pair<int, int> player::get_clua_coordinates_offset(level_id level)
+{
+    pair<int, int> offset = clua_coordinates_offset[level];
+    if (offset == pair<int, int>(0, 0)) {
+        int dx = random_range(-100, 100);
+        int dy = random_range(-100, 100);
+        offset = pair<int, int>(dx, dy);
+        clua_coordinates_offset[level] = offset;
+    }
+
+    return offset;
+}
